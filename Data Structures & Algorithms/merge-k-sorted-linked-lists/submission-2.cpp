@@ -1,0 +1,83 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+
+class Solution {
+public:
+ ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
+        
+        ListNode* list3, *head, *tail;
+
+        if(list1 == nullptr)
+            return list2;
+        else if(list2 == nullptr)
+            return list1;
+        
+        if(list1->val <= list2->val)
+        {
+            head = list1;
+            list1 = list1->next;
+            tail = head;
+        }
+        else
+        {
+            head = list2;
+            list2 = list2->next;
+            tail = head;
+        }
+        
+        while(list1 != nullptr || list2 != nullptr)
+        {
+            if(list1 == nullptr)
+            {
+                tail->next = list2;
+                break;
+            }
+            if(list2 == nullptr)
+            {
+                tail->next = list1;
+                break;
+            }
+            if(list1->val <= list2->val)
+            {
+                tail->next = list1;
+                list1 = list1->next;
+            }
+            else
+            {
+                tail->next = list2;
+                list2 = list2->next;
+            }
+
+            tail = tail->next;
+        }
+        return head;
+    }
+
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        ListNode* head = nullptr;
+
+        if(lists.size() == 1)
+            return lists[0];
+
+        for(int i=1; i<lists.size(); i++)
+        {
+            if(!head)
+            {
+                head = mergeTwoLists(lists[i-1], lists[i]);
+            }
+            else
+            {
+                head = mergeTwoLists(head, lists[i]);
+            } 
+        }
+        return head;
+    }
+};
